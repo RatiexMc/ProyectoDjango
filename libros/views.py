@@ -11,6 +11,10 @@ class AutorListCreateView(generics.ListCreateAPIView):
 class LibroListCreateView(generics.ListCreateAPIView):
     queryset = Libro.objects.all()
     serializer_class = LibroSerializer
+    
+class LibroDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Libro.objects.all()
+    serializer_class = LibroSerializer
 
 class GeneroListCreateView(generics.ListCreateAPIView):
     queryset = Genero.objects.all()
