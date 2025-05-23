@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
+
 
 class Autor(models.Model):
     nombre = models.CharField(max_length=100)
@@ -20,7 +22,12 @@ class Libro(models.Model):
     fecha_lanzamiento = models.DateField()
     generos = models.ManyToManyField(Genero)  # Relación M:N con género
     vistas = models.PositiveIntegerField(default=2)
-    url = models.URLField(help_text="Apunta al Home.html o alguna página")
+    archivo = models.FileField(
+    upload_to='libros/',
+    validators=[FileExtensionValidator(allowed_extensions=['epub'])],
+    help_text="Solo archivos EPUB"
+    )
+
 
     def __str__(self):
         return self.nombre

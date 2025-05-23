@@ -15,9 +15,10 @@ class LibroSerializer(serializers.ModelSerializer):
     autor_id = serializers.PrimaryKeyRelatedField(queryset=Autor.objects.all(),source='autor', write_only=True)
     generos = GeneroSerializer(many=True, read_only=True)
     generos_id = serializers.PrimaryKeyRelatedField(many=True, queryset=Genero.objects.all(), write_only=True,source='generos')
+    archivo = serializers.FileField(use_url=True) 
     class Meta:
         model = Libro
-        fields = ['id','nombre','autor','autor_id','fecha_lanzamiento','generos','generos_id','vistas','url']
+        fields = ['id','nombre','autor','autor_id','fecha_lanzamiento','generos','generos_id','vistas','archivo']
 class CalificacionUsuarioSerializer(serializers.ModelSerializer):
     usuario = serializers.StringRelatedField(read_only=True)#Muestra el nombre del usuario
     usuario_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),source='usuario', write_only=True)
