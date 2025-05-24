@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import LibroForm
+from .forms import LibroForm, CalificacionForm 
 from django.contrib.auth.decorators import login_required
 from rest_framework import generics
 from .models import Autor, Libro, Genero, CalificacionUsuario
@@ -49,7 +49,28 @@ def subir_libro(request):
         'mensaje': mensaje
     })
 
-# ✅ Nueva vista: Biblioteca de libros (HTML)
+@login_required
+def calificar_libro(request, libro_id):
+    libro = get_object_or_404(Libro, id=libro_id)
+
+    if request.method == 'POST':
+        form = CalificacionForm(request.POST)
+        if form.is_valid():
+            calificacion = form.save(commit=False)
+            calificacion.usuario = request.user
+            calificacion.libro = libro
+            calificacion.save()
+            return redirect('ver_libro', pk=libro.id)
+
+    else:
+        form = CalificacionForm()
+
+    return render(request, 'libros/calificar_libro.html', {
+        'libro': libro,
+        'form': form
+    })
+
+# Nueva vista: Biblioteca de libros (HTML)
 @login_required
 def biblioteca_libros(request):
     query = request.GET.get("q")
@@ -88,11 +109,11 @@ def editar_libro(request, pk):
         'libro': libro,
         'mensaje': mensaje
     })
-
 @login_required
 def ver_libro(request, pk):
     libro = get_object_or_404(Libro, pk=pk)
-    return render(request, 'libros/ver_libro.html', {'libro': libro})
-
-
-
+    reseñas = CalificacionUsuario.objects.filter(libro=libro).order_by('-fecha')
+    return render(request, 'libros/ver_libro.html', {
+        'libro': libro,
+        'reseñas': reseñas
+    })
