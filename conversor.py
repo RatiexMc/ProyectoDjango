@@ -42,12 +42,15 @@ def reviews_to_csv(csv_path=None):
     """Exporta la cantidad de reseñas realizadas por cada usuario."""
     if csv_path is None:
         csv_path = settings.MEDIA_ROOT / 'reviews.csv'
-    qs = (CalificacionUsuario.objects
-          .values('usuario__username')
-          .annotate(count=models.Count('id'))
-          .order_by('-count'))
+    
+    qs = (
+        CalificacionUsuario.objects
+        .values('usuario__username')
+        .annotate(count=models.Count('id'))
+        .order_by('-count')
+    )
     data = list(qs)
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(data, columns=['usuario__username', 'count'])
     df.to_csv(csv_path, index=False)
     return csv_path
 

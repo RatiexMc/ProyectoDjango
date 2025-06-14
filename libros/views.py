@@ -194,7 +194,10 @@ def estadisticas_view(request):
     df_gen = df.explode('generos')
 
     genero_counts = df_gen['generos'].value_counts()
-    usuario_counts = df_reviews.set_index('usuario__username')['count']
+    if 'usuario__username' in df_reviews.columns:
+        usuario_counts = df_reviews.set_index('usuario__username')['count']
+    else:
+        usuario_counts = pd.Series(dtype=int)
     top_user = usuario_counts.idxmax() if not usuario_counts.empty else 'N/A'
     top_user_count = int(usuario_counts.max()) if not usuario_counts.empty else 0
     genero_mas = genero_counts.idxmax() if not genero_counts.empty else 'N/A'
@@ -245,7 +248,10 @@ def estadisticas_view(request):
 
     # Gráfico de reseñas por usuario
     fig3, ax3 = plt.subplots()
-    usuario_counts.plot(kind='bar', ax=ax3, color=plt.cm.viridis.colors)
+    if not usuario_counts.empty:
+        usuario_counts.plot(kind='bar', ax=ax3, color=plt.cm.viridis.colors)
+    else:
+        ax3.text(0.5, 0.5, 'Sin datos', ha='center', va='center')
     ax3.set_xlabel('Usuario')
     ax3.set_ylabel('Cantidad de reseñas')
     ax3.set_title('Reseñas por usuario')

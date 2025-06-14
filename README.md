@@ -14,7 +14,8 @@ Este proyecto es una plataforma web desarrollada con Django y PostgreSQL que per
 ## Estadísticas y análisis
 
 Con `conversor.py` puedes exportar los datos de la base al archivo
-`media/db_export.csv` y cargarlos en pandas para análisis.
+`media/db_export.csv` y cargarlos en pandas para análisis. Asegúrate de tener
+la biblioteca **pandas** instalada para poder generar las gráficas.
 El sitio incluye una página de **Estadísticas** accesible desde la biblioteca,
 que muestra gráficos con la distribución de géneros y la calificación media de
 los libros.
@@ -25,3 +26,7 @@ los libros.
 - Django REST Framework
 - PostgreSQL
 - Bootstrap 5
+
+## Colecciones Postman
+
+Se incluyen archivos de colección para probar la API con Postman. El archivo `FullAPI.postman_collection.json` reúne todas las peticiones disponibles. También puedes consultar la tabla `POSTMAN_TABLE.md` para ver un resumen de cada endpoint.
