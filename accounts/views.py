@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
-import requests
 
 
 
@@ -48,20 +47,18 @@ def register_view(request):
                 "mensaje": mensaje
             })
 
-        # Enviar datos al endpoint de registro
-        response = requests.post(
-            "http://127.0.0.1:8000/api/auth/register/",
-            json={
-                "username": username,
-                "email": email,
-                "password": password
-            }
-        )
+        # Crear el usuario directamente sin realizar una petición HTTP
+        serializer = RegisterSerializer(data={
+            "username": username,
+            "email": email,
+            "password": password,
+        })
 
-        if response.status_code == 201:
+        if serializer.is_valid():
+            serializer.save()
             mensaje = "¡Usuario registrado correctamente!"
         else:
-            error_data = response.json()
+            error_data = serializer.errors
             error = (
                 error_data.get("username") or
                 error_data.get("email") or
