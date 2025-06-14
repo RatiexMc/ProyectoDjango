@@ -11,6 +11,14 @@ Este proyecto es una plataforma web desarrollada con Django y PostgreSQL que per
 - 🧩 API REST para integración con frontend y herramientas externas
 - 🗂️ Base de datos PostgreSQL
 
+## Estadísticas y análisis
+
+Con `conversor.py` puedes exportar los datos de la base al archivo
+`media/db_export.csv` y cargarlos en pandas para análisis.
+El sitio incluye una página de **Estadísticas** accesible desde la biblioteca,
+que muestra gráficos con la distribución de géneros y la calificación media de
+los libros.
+
 ## Tecnologías usadas:
 
 - Django 5.2.1

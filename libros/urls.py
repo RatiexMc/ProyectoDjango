@@ -15,6 +15,7 @@ from .views import (
     editar_libro,                # Vista HTML: editar libro
     ver_libro,                   # Vista HTML: ver detalle de un libro
     calificar_libro,             # Vista HTML: calificar libro
+    estadisticas_view,           # Vista HTML: estadísticas y gráficos
 
     AutorDetailView,             # API: detalle de autor (GET, PUT, DELETE)
     GeneroDetailView,            # API: detalle de género (GET, PUT, DELETE)
@@ -37,6 +38,7 @@ urlpatterns = [
     path('editar/<int:pk>/', editar_libro, name='editar_libro'),       # Editar libro
     path('ver/<int:pk>/', ver_libro, name='ver_libro'),               # Ver detalle de libro
     path('libros/<int:libro_id>/calificar/', calificar_libro, name='calificar_libro'), # Calificar libro
+    path('estadisticas/', estadisticas_view, name='estadisticas'),  # Ver estadísticas
 
     # API REST (detalle)
     path('autores/<int:pk>/', AutorDetailView.as_view(), name='autor-detalle'),

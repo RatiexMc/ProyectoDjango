@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect
 
 # Importamos generics para crear vistas basadas en clases en la API REST
 from rest_framework import generics
-
+from rest_framework.permissions import AllowAny
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 # Importamos nuestro serializador personalizado
 from .serializers import RegisterSerializer
 
@@ -30,6 +32,11 @@ def home_view(request):
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
+    # Permite que cualquier usuario (incluso no autenticado) pueda
+    # acceder a este endpoint para registrarse
+    permission_classes = [AllowAny]
+    # Evita comprobaciones CSRF eliminando la autenticación por sesión
+    authentication_classes = []
 
 # Vista HTML para iniciar sesión mediante formulario
 def login_view(request):
