@@ -1,3 +1,4 @@
+# Imports básicos
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import LibroForm, CalificacionForm 
 from django.contrib.auth.decorators import login_required
@@ -6,60 +7,62 @@ from .models import Autor, Libro, Genero, CalificacionUsuario
 from .serializers import AutorSerializer, LibroSerializer, GeneroSerializer, CalificacionUsuarioSerializer
 from django.db.models import Q
 from django.contrib import messages
-from rest_framework.permissions import IsAuthenticated  # ← para proteger las vistas API
+from rest_framework.permissions import IsAuthenticated  # Protege las vistas API
 
 # ------------------------ Vistas API protegidas ------------------------
 
-# Vista para listar y crear autores (requiere usuario autenticado)
+# Listar y crear autores
 class AutorListCreateView(generics.ListCreateAPIView):
     queryset = Autor.objects.all()
     serializer_class = AutorSerializer
 
     def perform_create(self, serializer):
+        # Asocia el autor al usuario que realiza la creación
         serializer.save(creado_por=self.request.user)
 
-
-# Vista para listar y crear géneros (requiere usuario autenticado)
+# Listar y crear géneros
 class GeneroListCreateView(generics.ListCreateAPIView):
     queryset = Genero.objects.all()
     serializer_class = GeneroSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # Requiere usuario autenticado
 
     def perform_create(self, serializer):
-        # Asociar el género al usuario que hizo la solicitud
+        # Asocia el género al usuario que realiza la creación
         serializer.save(creado_por=self.request.user)
 
-# Vista para listar y crear libros (vía API)
+# Listar y crear libros
 class LibroListCreateView(generics.ListCreateAPIView):
     queryset = Libro.objects.all()
     serializer_class = LibroSerializer
 
-# Vista para detalle de libro (obtener, actualizar o eliminar)
+# Obtener, actualizar, eliminar libro
 class LibroDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Libro.objects.all()
     serializer_class = LibroSerializer
 
-# Vista para listar y crear calificaciones (API)
+# Listar y crear calificaciones de usuario
 class CalificacionUsuarioListCreateView(generics.ListCreateAPIView):
     queryset = CalificacionUsuario.objects.all()
     serializer_class = CalificacionUsuarioSerializer
 
-# Vistas para eliminar entidades por ID
+# Eliminar, actualizar, obtener autor por ID
 class AutorDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Autor.objects.all()
     serializer_class = AutorSerializer
 
+# Eliminar, actualizar, obtener género por ID
 class GeneroDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Genero.objects.all()
     serializer_class = GeneroSerializer
 
+# Eliminar, actualizar, obtener calificación por ID
 class CalificacionUsuarioDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CalificacionUsuario.objects.all()
     serializer_class = CalificacionUsuarioSerializer
 
 # ------------------------ Vistas HTML ------------------------
 
-# Subir nuevo libro mediante formulario HTML
+# Subir un nuevo libro (vista con formulario HTML)
 @login_required
 def subir_libro(request):
     libro = None
@@ -67,14 +70,14 @@ def subir_libro(request):
 
     if request.method == 'POST':
         form = LibroForm(request.POST, request.FILES)
-        # Refrescar los queryset para asegurarse de incluir valores nuevos
+        # Actualizamos queryset de autores y géneros
         form.fields['autor'].queryset = Autor.objects.all()
         form.fields['generos'].queryset = Genero.objects.all()
 
         if form.is_valid():
             libro = form.save()
             mensaje = "¡Libro subido correctamente!"
-            form = LibroForm()  # Limpiar formulario tras éxito
+            form = LibroForm()  # Limpiamos formulario
     else:
         form = LibroForm()
         form.fields['autor'].queryset = Autor.objects.all()
@@ -86,7 +89,7 @@ def subir_libro(request):
         'mensaje': mensaje
     })
 
-# Calificar libro desde vista HTML
+# Calificar un libro (vista con formulario HTML)
 @login_required
 def calificar_libro(request, libro_id):
     libro = get_object_or_404(Libro, id=libro_id)
@@ -107,7 +110,7 @@ def calificar_libro(request, libro_id):
         'form': form
     })
 
-# Biblioteca principal de libros
+# Biblioteca de libros con buscador
 @login_required
 def biblioteca_libros(request):
     query = request.GET.get("q")
@@ -121,7 +124,7 @@ def biblioteca_libros(request):
 
     return render(request, 'libros/biblioteca_libros.html', {'libros': libros})
 
-# Eliminar libro por ID
+# Eliminar un libro
 @login_required
 def eliminar_libro(request, pk):
     libro = get_object_or_404(Libro, pk=pk)
@@ -129,7 +132,7 @@ def eliminar_libro(request, pk):
     messages.success(request, "Libro eliminado correctamente.")
     return redirect('biblioteca_libros')
 
-# Editar libro existente
+# Editar un libro
 @login_required
 def editar_libro(request, pk):
     libro = get_object_or_404(Libro, pk=pk)
@@ -150,7 +153,7 @@ def editar_libro(request, pk):
         'mensaje': mensaje
     })
 
-# Ver detalle del libro con reseñas
+# Ver detalle del libro (con reseñas)
 @login_required
 def ver_libro(request, pk):
     libro = get_object_or_404(Libro, pk=pk)
