@@ -1,6 +1,6 @@
 # 📚 Proyecto Django - Biblioteca de Libros
 
-Este proyecto es una plataforma web desarrollada con Django y PostgreSQL que permite a los usuarios registrarse, iniciar sesión y gestionar una biblioteca digital. Incluye funcionalidades para subir libros en formato `.epub`, clasificarlos por autor y género, calificarlos y visualizarlos desde una interfaz web y a través de una API REST protegida.
+Este proyecto es una plataforma web desarrollada con Django y PostgreSQL que permite a los usuarios registrarse, iniciar sesión y gestionar una biblioteca digital. Incluye funcionalidades para subir libros, modificar libros, eliminar libros en formato `.epub`, clasificarlos por autor y género, calificarlos y visualizarlos desde una interfaz web con opción a descarga y a través de una API REST protegida.
 
 ## Características principales:
 
@@ -21,7 +21,7 @@ que muestra gráficos con la distribución de géneros y la calificación media 
 los libros.
 
 ## Tecnologías usadas:
-
+- Python
 - Django 5.2.1
 - Django REST Framework
 - PostgreSQL
@@ -29,50 +29,36 @@ los libros.
 
 ## Colecciones Postman
 
-Se incluyen archivos de colección para probar la API con Postman. El archivo `FullAPI.postman_collection.json` reúne todas las peticiones disponibles. También puedes consultar la tabla `POSTMAN_TABLE.md` para ver un resumen de cada endpoint.
+Se incluyen archivos de colección para probar la API con Postman. Los archivos `Libros.postman_collection.json` y `SistemaLogin.postman_collection.json` reúne todas las peticiones disponibles. También puedes consultar la tabla `POSTMAN_TABLE.md` para ver un resumen de cada endpoint.
 
 ## Versiones utilizadas
 
-- **Python** 3.12.10
+- **Python** 3.11.9
 - **Django** 5.2.1
 - **Django REST Framework** 3.16
 - **PostgreSQL** 14+
 - **pip** 25.1.1
-
+- **BootStrap** 5
 ## Instalación rápida
 
-1. Instala Python 3.12 y `pip`.
+1. Instala Python 3.11.9 y `pip`.
 2. Crea un entorno virtual con `python -m venv venv` y actívalo.
 3. Ejecuta `pip install -r requirements.txt` para instalar las dependencias.
 4. Configura tu base de datos PostgreSQL en `miApp/settings.py`.
-5. Realiza las migraciones con `python manage.py migrate`.
+5. Realiza las migraciones con`python manage.py makemigrations`, `python manage.py migrate`.
 6. Crea un superusuario con `python manage.py createsuperuser` y ejecuta el servidor con `python manage.py runserver`.
 
 ## Fundamentación
 
-El proyecto surge como una biblioteca digital donde cualquier usuario registrado puede subir y calificar libros en formato `.epub`.  Cuenta con un panel web para gestionar autores y géneros y una API REST que permite integrar la información con otras herramientas (por ejemplo aplicaciones móviles o Postman).  Con `conversor.py` exportamos los registros a CSV y mediante **pandas** se generan estadísticas básicas.
+El proyecto surge como una biblioteca digital donde cualquier usuario registrado puede subir y calificar libros en formato `.epub`.  Cuenta con un panel web para gestionar autores y géneros y una API REST que permite integrar la información con otras herramientas (por ejemplo aplicaciones móviles o Postman).
 
 ## Registro de un libro
 
-Para crear un libro mediante la API se envía una petición `POST` a `/api/libros/libros/` con los datos del libro. A modo de referencia:
-
-```json
-{
-  "nombre": "Mi libro",
-  "autor": 1,
-  "fecha_lanzamiento": "2024-01-01",
-  "generos": [1],
-  "archivo": "(archivo .epub)"
-}
-```
-
-![Captura registro](ruta/a/captura_registro.png)
+Para crear un libro mediante la API se envía una petición `POST` a `/api/libros/libros/` con los datos del libro.
 
 ## Listado de libros
 
-La ruta `GET /api/libros/libros/` devuelve todos los libros registrados. El siguiente ejemplo muestra la respuesta obtenida en Postman.
-
-![Captura listado](ruta/a/captura_listado.png)
+La ruta `GET /api/libros/libros/` devuelve todos los libros registrados.
 
 ## Uso de pandas
 
@@ -106,9 +92,6 @@ Además se generan tres gráficas que se muestran en la interfaz:
 2. **Calificación media por libro.**
 3. **Reseñas por usuario.**
 
-![Gráfico género](ruta/a/grafico_genero.png)
-![Gráfico calificación](ruta/a/grafico_calificacion.png)
-![Gráfico reseñas](ruta/a/grafico_reseñas.png)
 
 ## Próximamente
 
