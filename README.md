@@ -115,5 +115,3 @@ Además se generan tres gráficas que se muestran en la interfaz:
 - Sugerencias de libros por género seleccionado.
 
 ## Licencia
-
-Este proyecto se distribuye bajo los términos de la [Licencia MIT](LICENSE).
