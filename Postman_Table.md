@@ -1,5 +1,6 @@
 # Tabla de endpoints API
-La siguiente tabla resume las rutas principales disponibles en el proyecto. Puedes importarlas en Postman usando el archivo `FullAPI.postman_collection.json`.
+La siguiente tabla resume las rutas principales disponibles en el proyecto. Puedes importarlas en Postman usando el archivo SistemaLogin y Libros en formato .json
+Algunas de ellas son:
 | Método | Ruta | Descripción |
 |-------|------|-------------|
 | POST | `/api/auth/register/` | Registro de usuarios |
